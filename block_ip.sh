@@ -6,7 +6,7 @@ log = /usr/local/data/nginx/logs/access.log
 
 test -e ${conf} || touch ${conf}
 block_ip = ""
-for block_ip in $(cat $log | awk '{print $1}' | sort | uniq -c | sort -rn | awk '{if ($1>500) print $2}')
+for block_ip in $(cat $log | awk '{print $1}' | sort | uniq -c | sort -rn | awk '{if ($1 > $max) print $2}')
 do
     grep -q "${block_ip}" ${conf} && eg = 1 || eg = 0;
     if ((${eg} == 0));then
@@ -18,5 +18,5 @@ service nginx reload
 
 
 #!/bin/bash
-sed -i 's/^/#&/g' /usr/local/nginx/conf/blocl_ip.conf
+sed -i 's/^/#&/g' /usr/local/data/nginx/conf/block_ip.conf
 service nginx reload
