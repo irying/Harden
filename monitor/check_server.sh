@@ -15,3 +15,14 @@ Check_Nginx_Server(){
 }
 
 Check_Nginx_Server	
+
+
+Check_Mysql_Server()
+{
+    nc -z -w2 ${MysqlServer} 3306
+    if [ $? eq 0 ];then
+    echo "connected ${MysqlServer} is Ok!"
+    fi
+}
+
+Check_Mysql_Server
