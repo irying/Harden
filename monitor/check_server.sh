@@ -21,6 +21,13 @@ Check_Mysql_Server()
 {
     nc -z -w2 ${MysqlServer} 3306
     if [ $? eq 0 ];then
+    mysql -u${Mysql_User} -p${Mysql_Pass} -h${Mysql_Slave_Server} -e "show slave status|G"|grep "Slave_IO_Running"|awk '{if($2 !="Yes"){print "Slave thread not running!";exit 1}}'
+    if [$? -eq 0];then
+    mysql -u${Mysql_User} -p${Mysql_Pass} -h${Mysql_Slave_Server} -e "show slave status\G"|grep"Seconds_Behind_Master"
+    fi
+    else
+    echo "Connect Mysql Slave Server not succeeded"
+    else
     echo "connected ${MysqlServer} is Ok!"
     fi
 }
